@@ -31,103 +31,40 @@ class Ui_MainWindow(QtGui.QMainWindow):
         
     def setup_ui(self):
         self.resize(1024, 800)
+        self.setWindowTitle("PyCommander")
         
         self.setup_body()
         self.setup_menu_bar()
         self.setup_status_bar()
-        
-        self.retranslateUi()        
+       
         QtCore.QMetaObject.connectSlotsByName(self)
-
-    def retranslateUi(self):
-        self.setWindowTitle(_translate("MainWindow", "PyCommander", None))
-        self.pushButton.setText(_translate("MainWindow", "F3 View", None))
-        self.pushButton_2.setText(_translate("MainWindow", "F4 Edit", None))
-        self.pushButton_3.setText(_translate("MainWindow", "F5 Copy", None))
-        self.pushButton_4.setText(_translate("MainWindow", "F6 Move", None))
-        self.pushButton_5.setText(_translate("MainWindow", "F7 New Folder", None))
-        self.pushButton_6.setText(_translate("MainWindow", "F8 Delete", None))
-        self.pushButton_7.setText(_translate("MainWindow", "Alt+F4 Exit", None))
         
     def setup_body(self):
-        self.centralwidget = QtGui.QWidget(self)
-        self.centralwidget.setAutoFillBackground(False)
-        self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
-        self.bodyContainer = QtGui.QFrame(self.centralwidget)
+        self.central_widget = QtGui.QWidget(self)
+        self.central_widget.setAutoFillBackground(False)
+        self.central_layout = QtGui.QVBoxLayout(self.central_widget)
         
-        self.horizontalLayout_2 = QtGui.QHBoxLayout(self.bodyContainer)
-        self.horizontalLayout_2.setMargin(0)
+        self.body_container = QtGui.QFrame(self.central_widget)
+        self.body_layout = QtGui.QHBoxLayout(self.body_container)
+        self.body_layout.setMargin(0)
                 
-        self.tabLeft = Ui_MainPanel(self.bodyContainer)
-        self.horizontalLayout_2.addWidget(self.tabLeft.widget)
+        self.tab_left = Ui_MainPanel(self)
+        self.tab_right = Ui_MainPanel(self)
         
-        self.tabRight = Ui_MainPanel(self.bodyContainer)
-        self.horizontalLayout_2.addWidget(self.tabRight.widget)
+        self.central_layout.addWidget(self.body_container)
         
-        self.verticalLayout.addWidget(self.bodyContainer)
+        self.footer_container = QtGui.QFrame(self.central_widget)
+        self.footer_container.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.footer_container.setFrameShadow(QtGui.QFrame.Raised)
+        self.footer_layout = QtGui.QHBoxLayout(self.footer_container)
+        self.footer_layout.setSpacing(0)
+        self.footer_layout.setMargin(0)
         
+        self.setup_footer()
         
-        self.footerContainer = QtGui.QFrame(self.centralwidget)
-        self.footerContainer.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.footerContainer.setFrameShadow(QtGui.QFrame.Raised)
-        self.footerContainer.setObjectName(_fromUtf8("footerContainer"))
-        self.horizontalLayout = QtGui.QHBoxLayout(self.footerContainer)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setMargin(0)
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.central_layout.addWidget(self.footer_container)
         
-        self.pushButton = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName(_fromUtf8("pushButton"))
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.pushButton_2 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.pushButton_3 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
-        self.horizontalLayout.addWidget(self.pushButton_3)
-        self.pushButton_4 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setObjectName(_fromUtf8("pushButton_4"))
-        self.horizontalLayout.addWidget(self.pushButton_4)
-        self.pushButton_5 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_5.setFont(font)
-        self.pushButton_5.setObjectName(_fromUtf8("pushButton_5"))
-        self.horizontalLayout.addWidget(self.pushButton_5)
-        self.pushButton_6 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_6.setFont(font)
-        self.pushButton_6.setObjectName(_fromUtf8("pushButton_6"))
-        self.horizontalLayout.addWidget(self.pushButton_6)
-        self.pushButton_7 = QtGui.QPushButton(self.footerContainer)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_7.setFont(font)
-        self.pushButton_7.setObjectName(_fromUtf8("pushButton_7"))
-        self.horizontalLayout.addWidget(self.pushButton_7)
-        self.verticalLayout.addWidget(self.footerContainer)
-        
-        self.setCentralWidget(self.centralwidget)
+        self.setCentralWidget(self.central_widget)
     
     def setup_menu_bar(self):
         self.menubar = QtGui.QMenuBar(self)
@@ -139,6 +76,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
         
         self.actionQuit = QtGui.QAction(self)
         self.actionQuit.setText("Quit")
+        self.actionQuit.setShortcut("Ctrl+Q")
+        self.actionQuit.setStatusTip("Exit application")
+        self.actionQuit.triggered.connect(QtGui.qApp.quit)
         
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
@@ -166,11 +106,61 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.setStatusBar(self.statusbar)
                 
     def setup_footer(self):
-        pass
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        
+        self.push_button_f3 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f3.setFont(font)
+        self.push_button_f3.setText("F3 View")
+        self.push_button_f3.setShortcut("F3")
+        self.footer_layout.addWidget(self.push_button_f3)
+       
+        self.push_button_f4 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f4.setFont(font)
+        self.push_button_f4.setText("F4 Edit")
+        self.push_button_f4.setShortcut("F4")
+        self.footer_layout.addWidget(self.push_button_f4)
+        
+        self.push_button_f5 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f5.setFont(font)
+        self.push_button_f5.setText("F5 Copy")
+        self.push_button_f5.setShortcut("F5")
+        self.footer_layout.addWidget(self.push_button_f5)
+        
+        self.push_button_f6 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f6.setFont(font)
+        self.push_button_f6.setText("F6 Move")
+        self.push_button_f6.setShortcut("F6")
+        self.footer_layout.addWidget(self.push_button_f6)
+        
+        self.push_button_f7 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f7.setFont(font)
+        self.push_button_f7.setText("F7 New Folder")
+        self.push_button_f7.setShortcut("F7")
+        self.footer_layout.addWidget(self.push_button_f7)
+        
+        self.push_button_f8 = QtGui.QPushButton(self.footer_container)
+        self.push_button_f8.setFont(font)
+        self.push_button_f8.setText("F8 View")
+        self.push_button_f8.setShortcut("F8")
+        self.footer_layout.addWidget(self.push_button_f8)
+        
+        self.push_button_alt_f4 = QtGui.QPushButton(self.footer_container)
+        self.push_button_alt_f4.setFont(font)
+        self.push_button_alt_f4.setText("ALT+F4 Exit")
+        self.footer_layout.addWidget(self.push_button_alt_f4)
+        
 
-class Ui_MainPanel(object):
+class Ui_MainPanel(QtGui.QWidget):
     
-    def __init__(self, container, current_folder_path = ""):
+    def __init__(self, main_window):
+        super(Ui_MainPanel, self).__init__(main_window.body_container)
+        self.set_current_folder()
+        self.setup_widget()
+        main_window.body_layout.addWidget(self)
+        
+    def set_current_folder(self, current_folder_path = ""):
         if (current_folder_path == ""):
             current_folder_path = os.getcwd()
             current_folder_name = os.path.basename(os.getcwd())
@@ -179,16 +169,13 @@ class Ui_MainPanel(object):
             
         self.current_folder_path = current_folder_path
         self.current_folder_name = current_folder_name
-        self.setup_widget(container)
         
-    def setup_widget(self, container):
-        self.widget = QtGui.QWidget(container)
-        
-        self.main_layout = QtGui.QVBoxLayout(self.widget)
+    def setup_widget(self):        
+        self.main_layout = QtGui.QVBoxLayout(self)
         self.main_layout.setSpacing(0)
         self.main_layout.setMargin(0)
         
-        self.tab = QtGui.QTabWidget(self.widget)
+        self.tab = QtGui.QTabWidget(self)
         
         self.tab_widget = QtGui.QWidget()
         self.tab_layout = QtGui.QVBoxLayout(self.tab_widget)
@@ -206,11 +193,12 @@ class Ui_MainPanel(object):
         
         self.tree_view = QtGui.QTreeView(self.tab_widget)
         self.model = QtGui.QFileSystemModel()
-        self.model.setRootPath(os.getcwd())
-        #self.modelLeft.setFilter(QtCore.QDir.Dirs|QtCore.QDir.NoDotAndDotDot)
+        self.model.setRootPath(self.current_folder_path)
+        #self.model.setFilter(QtCore.QDir.Drives)
         self.tree_view.setModel(self.model)
         self.tree_view.setItemsExpandable(False)    
-        self.tree_view.setRootIndex(self.model.index(self.current_folder_path))
+        self.tree_view.clicked.connect(self.tree_clicked)
+        self.tree_view.doubleClicked.connect(self.tree_double_clicked)
         self.tab_layout.addWidget(self.tree_view)
         
         self.status_widget = QtGui.QWidget(self.tab_widget)
@@ -228,7 +216,19 @@ class Ui_MainPanel(object):
         self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
         
         self.tab.setCurrentIndex(0)
-        
+        self.goto_folder(self.model.index(self.current_folder_path))
+    
+    def goto_folder(self, index):
+        self.tree_view.setRootIndex(index)
+    
+    def tree_clicked(self, index):
+        print index.model().filePath(index)
+    
+    def tree_double_clicked(self, index):
+        if index.model().isDir(index):
+            self.goto_folder(index)
+            
+    # print self.model.itemFromIndex(index).text()
 def main():
     app = QtGui.QApplication(sys.argv)
     window = Ui_MainWindow()
