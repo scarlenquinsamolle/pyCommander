@@ -6,6 +6,7 @@
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
+import os, sys
 
 from PyQt4 import QtCore, QtGui
 
@@ -23,77 +24,49 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(872, 707)
-        self.centralwidget = QtGui.QWidget(MainWindow)
+class Ui_MainWindow(QtGui.QMainWindow):
+    def __init__(self):
+        super(Ui_MainWindow, self).__init__()
+        self.setup_ui()
+        
+    def setup_ui(self):
+        self.resize(1024, 800)
+        
+        self.setup_body()
+        self.setup_menu_bar()
+        self.setup_status_bar()
+        
+        self.retranslateUi()        
+        QtCore.QMetaObject.connectSlotsByName(self)
+
+    def retranslateUi(self):
+        self.setWindowTitle(_translate("MainWindow", "PyCommander", None))
+        self.pushButton.setText(_translate("MainWindow", "F3 View", None))
+        self.pushButton_2.setText(_translate("MainWindow", "F4 Edit", None))
+        self.pushButton_3.setText(_translate("MainWindow", "F5 Copy", None))
+        self.pushButton_4.setText(_translate("MainWindow", "F6 Move", None))
+        self.pushButton_5.setText(_translate("MainWindow", "F7 New Folder", None))
+        self.pushButton_6.setText(_translate("MainWindow", "F8 Delete", None))
+        self.pushButton_7.setText(_translate("MainWindow", "Alt+F4 Exit", None))
+        
+    def setup_body(self):
+        self.centralwidget = QtGui.QWidget(self)
         self.centralwidget.setAutoFillBackground(False)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.bodyContainer = QtGui.QFrame(self.centralwidget)
-        self.bodyContainer.setObjectName(_fromUtf8("bodyContainer"))
+        
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.bodyContainer)
         self.horizontalLayout_2.setMargin(0)
-        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.tabLeft = QtGui.QTabWidget(self.bodyContainer)
-        self.tabLeft.setObjectName(_fromUtf8("tabLeft"))
-        self.tabL_1 = QtGui.QWidget()
-        self.tabL_1.setObjectName(_fromUtf8("tabL_1"))
-        self.gridLayout_2 = QtGui.QGridLayout(self.tabL_1)
-        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.frame_3 = QtGui.QFrame(self.tabL_1)
-        self.frame_3.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtGui.QFrame.Raised)
-        self.frame_3.setObjectName(_fromUtf8("frame_3"))
-        self.gridLayout_2.addWidget(self.frame_3, 3, 0, 1, 1)
-        self.widget = QtGui.QWidget(self.tabL_1)
-        self.widget.setObjectName(_fromUtf8("widget"))
-        self.gridLayout = QtGui.QGridLayout(self.widget)
-        self.gridLayout.setMargin(0)
-        self.gridLayout.setSpacing(0)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.lineEdit = QtGui.QLineEdit(self.widget)
-        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
-        self.gridLayout.addWidget(self.lineEdit, 0, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 1)
-        self.treeViewLeft = QtGui.QTreeView(self.tabL_1)
-        self.treeViewLeft.setObjectName(_fromUtf8("treeViewLeft"))
-        self.modelLeft = QtGui.QDirModel()
-        self.treeViewLeft.setModel(self.modelLeft)        
-        self.gridLayout_2.addWidget(self.treeViewLeft, 1, 0, 1, 1)
-        self.tabLeft.addTab(self.tabL_1, _fromUtf8(""))
-        self.horizontalLayout_2.addWidget(self.tabLeft)
-        self.tabRight = QtGui.QTabWidget(self.bodyContainer)
-        self.tabRight.setObjectName(_fromUtf8("tabRight"))
-        self.tabR_1 = QtGui.QWidget()
-        self.tabR_1.setObjectName(_fromUtf8("tabR_1"))
-        self.gridLayout_3 = QtGui.QGridLayout(self.tabR_1)
-        self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.frame_2 = QtGui.QFrame(self.tabR_1)
-        self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
-        self.frame_2.setObjectName(_fromUtf8("frame_2"))
-        self.gridLayout_3.addWidget(self.frame_2, 2, 0, 1, 1)
-        self.widget_2 = QtGui.QWidget(self.tabR_1)
-        self.widget_2.setObjectName(_fromUtf8("widget_2"))
-        self.gridLayout_4 = QtGui.QGridLayout(self.widget_2)
-        self.gridLayout_4.setMargin(0)
-        self.gridLayout_4.setSpacing(0)
-        self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
-        self.lineEdit_2 = QtGui.QLineEdit(self.widget_2)
-        self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
-        self.gridLayout_4.addWidget(self.lineEdit_2, 0, 0, 1, 1)
-        self.gridLayout_3.addWidget(self.widget_2, 0, 0, 1, 1)
-        self.treeViewRight = QtGui.QTreeView(self.tabR_1)
-        self.treeViewRight.setObjectName(_fromUtf8("treeViewRight"))
-        self.modelRight = QtGui.QDirModel()
-        self.treeViewRight.setModel(self.modelRight)
-        self.gridLayout_3.addWidget(self.treeViewRight, 1, 0, 1, 1)
-        self.tabRight.addTab(self.tabR_1, _fromUtf8(""))
-        self.horizontalLayout_2.addWidget(self.tabRight)
+                
+        self.tabLeft = Ui_MainPanel(self.bodyContainer)
+        self.horizontalLayout_2.addWidget(self.tabLeft.widget)
+        
+        self.tabRight = Ui_MainPanel(self.bodyContainer)
+        self.horizontalLayout_2.addWidget(self.tabRight.widget)
+        
         self.verticalLayout.addWidget(self.bodyContainer)
+        
+        
         self.footerContainer = QtGui.QFrame(self.centralwidget)
         self.footerContainer.setFrameShape(QtGui.QFrame.StyledPanel)
         self.footerContainer.setFrameShadow(QtGui.QFrame.Raised)
@@ -102,6 +75,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        
         self.pushButton = QtGui.QPushButton(self.footerContainer)
         font = QtGui.QFont()
         font.setBold(True)
@@ -152,50 +126,114 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName(_fromUtf8("pushButton_7"))
         self.horizontalLayout.addWidget(self.pushButton_7)
         self.verticalLayout.addWidget(self.footerContainer)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
+        
+        self.setCentralWidget(self.centralwidget)
+    
+    def setup_menu_bar(self):
+        self.menubar = QtGui.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 872, 21))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
+        
+        # Setting up menu Files
         self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        self.menuConfiguration = QtGui.QMenu(self.menubar)
-        self.menuConfiguration.setObjectName(_fromUtf8("menuConfiguration"))
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
-        self.actionAbout_PyComander = QtGui.QAction(MainWindow)
-        self.actionAbout_PyComander.setObjectName(_fromUtf8("actionAbout_PyComander"))
-        self.actionQuit = QtGui.QAction(MainWindow)
-        self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
+        self.menuFile.setTitle("Files")
+        
+        self.actionQuit = QtGui.QAction(self)
+        self.actionQuit.setText("Quit")
+        
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
-        self.menuHelp.addAction(self.actionAbout_PyComander)
         self.menubar.addAction(self.menuFile.menuAction())
+        
+        # Setting up configuration
+        self.menuConfiguration = QtGui.QMenu(self.menubar)
+        self.menuConfiguration.setTitle("Configuration")
         self.menubar.addAction(self.menuConfiguration.menuAction())
+        
+        # Setting up help
+        self.menuHelp = QtGui.QMenu(self.menubar)        
+        self.menuHelp.setTitle("Help")
+        
+        self.actionAboutPyComander = QtGui.QAction(self)
+        self.actionAboutPyComander.setText("About PyComander...")
+        
+        self.menuHelp.addAction(self.actionAboutPyComander)
         self.menubar.addAction(self.menuHelp.menuAction())
+        
+        self.setMenuBar(self.menubar)
+        
+    def setup_status_bar(self):
+        self.statusbar = QtGui.QStatusBar(self)        
+        self.setStatusBar(self.statusbar)
+                
+    def setup_footer(self):
+        pass
 
-        self.retranslateUi(MainWindow)
-        self.tabLeft.setCurrentIndex(0)
-        self.tabRight.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+class Ui_MainPanel(object):
+    
+    def __init__(self, container, current_folder_path = ""):
+        if (current_folder_path == ""):
+            current_folder_path = os.getcwd()
+            current_folder_name = os.path.basename(os.getcwd())
+        else:
+            current_folder_name = os.path.basename(current_folder_path)
+            
+        self.current_folder_path = current_folder_path
+        self.current_folder_name = current_folder_name
+        self.setup_widget(container)
+        
+    def setup_widget(self, container):
+        self.widget = QtGui.QWidget(container)
+        
+        self.main_layout = QtGui.QVBoxLayout(self.widget)
+        self.main_layout.setSpacing(0)
+        self.main_layout.setMargin(0)
+        
+        self.tab = QtGui.QTabWidget(self.widget)
+        
+        self.tab_widget = QtGui.QWidget()
+        self.tab_layout = QtGui.QVBoxLayout(self.tab_widget)
+        
+        self.path_widget = QtGui.QWidget(self.tab_widget)
+        self.path_layout = QtGui.QGridLayout(self.path_widget)
+        self.path_layout.setMargin(0)
+        self.path_layout.setSpacing(0)
+        
+        self.path_line_edit = QtGui.QLineEdit(self.path_widget)
+        self.path_line_edit.setText(self.current_folder_path)
+        self.path_line_edit.setEnabled(False)
+        self.path_layout.addWidget(self.path_line_edit, 0, 0, 1, 1)
+        self.tab_layout.addWidget(self.path_widget)
+        
+        self.tree_view = QtGui.QTreeView(self.tab_widget)
+        self.model = QtGui.QFileSystemModel()
+        self.model.setRootPath(os.getcwd())
+        #self.modelLeft.setFilter(QtCore.QDir.Dirs|QtCore.QDir.NoDotAndDotDot)
+        self.tree_view.setModel(self.model)
+        self.tree_view.setItemsExpandable(False)    
+        self.tree_view.setRootIndex(self.model.index(self.current_folder_path))
+        self.tab_layout.addWidget(self.tree_view)
+        
+        self.status_widget = QtGui.QWidget(self.tab_widget)
+        self.status_layout = QtGui.QHBoxLayout(self.status_widget)
+        self.status_layout.setMargin(0)
+        self.status_layout.setSpacing(0)
+        
+        self.status_line_edit = QtGui.QLabel(self.status_widget)
+        self.status_line_edit.setText(str(self.model.rowCount(self.model.index(self.current_folder_path))) + " / global folder data here")
+        self.status_layout.addWidget(self.status_line_edit)
+        self.tab_layout.addWidget(self.status_widget)
+        
+        self.tab.addTab(self.tab_widget, _fromUtf8(""))
+        self.main_layout.addWidget(self.tab)
+        self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
+        
+        self.tab.setCurrentIndex(0)
+        
+def main():
+    app = QtGui.QApplication(sys.argv)
+    window = Ui_MainWindow()
+    window.show()
+    sys.exit(app.exec_())
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "PyCommander", None))
-        self.tabLeft.setTabText(self.tabLeft.indexOf(self.tabL_1), _translate("MainWindow", "Tab 1", None))
-        self.tabRight.setTabText(self.tabRight.indexOf(self.tabR_1), _translate("MainWindow", "Tab 1", None))
-        self.pushButton.setText(_translate("MainWindow", "F3 View", None))
-        self.pushButton_2.setText(_translate("MainWindow", "F4 Edit", None))
-        self.pushButton_3.setText(_translate("MainWindow", "F5 Copy", None))
-        self.pushButton_4.setText(_translate("MainWindow", "F6 Move", None))
-        self.pushButton_5.setText(_translate("MainWindow", "F7 New Folder", None))
-        self.pushButton_6.setText(_translate("MainWindow", "F8 Delete", None))
-        self.pushButton_7.setText(_translate("MainWindow", "Alt+F4 Exit", None))
-        self.menuFile.setTitle(_translate("MainWindow", "Files", None))
-        self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
-        self.menuConfiguration.setTitle(_translate("MainWindow", "Configuration", None))
-        self.actionAbout_PyComander.setText(_translate("MainWindow", "About PyComander...", None))
-        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
-
+if __name__ == '__main__':
+    main()
