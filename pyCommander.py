@@ -24,6 +24,7 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+############################################################################
 class Ui_MainWindow(QtGui.QMainWindow):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
@@ -36,7 +37,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.setup_body()
         self.setup_menu_bar()
         self.setup_status_bar()
-       
+        self.setup_connections()
+        
         QtCore.QMetaObject.connectSlotsByName(self)
         
     def setup_body(self):
@@ -151,7 +153,17 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.push_button_alt_f4.setText("ALT+F4 Exit")
         self.footer_layout.addWidget(self.push_button_alt_f4)
         
-
+    def setup_connections(self):
+        self.connect(self.tab_left.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_right_panel)
+        self.connect(self.tab_right.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_left_panel)
+    
+    def switch_to_left_panel(self):
+        self.tab_left.tree_view.setFocus()
+        
+    def switch_to_right_panel(self):
+        self.tab_right.tree_view.setFocus()
+        
+############################################################################
 class Ui_MainPanel(QtGui.QWidget):
     
     def __init__(self, main_window):
@@ -191,12 +203,14 @@ class Ui_MainPanel(QtGui.QWidget):
         self.path_layout.addWidget(self.path_line_edit, 0, 0, 1, 1)
         self.tab_layout.addWidget(self.path_widget)
         
-        self.tree_view = QtGui.QTreeView(self.tab_widget)
+        self.tree_view = Ui_TreeView(self.tab_widget)
         self.model = QtGui.QFileSystemModel()
         self.model.setRootPath(self.current_folder_path)
         #self.model.setFilter(QtCore.QDir.Drives)
         self.tree_view.setModel(self.model)
         self.tree_view.setItemsExpandable(False)    
+        self.tree_view.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+        
         self.tree_view.clicked.connect(self.tree_clicked)
         self.tree_view.doubleClicked.connect(self.tree_double_clicked)
         self.tab_layout.addWidget(self.tree_view)
@@ -222,18 +236,32 @@ class Ui_MainPanel(QtGui.QWidget):
         self.tree_view.setRootIndex(index)
     
     def tree_clicked(self, index):
-        print index.model().filePath(index)
+        pass
     
     def tree_double_clicked(self, index):
         if index.model().isDir(index):
             self.goto_folder(index)
-            
+    
     # print self.model.itemFromIndex(index).text()
+    
+############################################################################
+class Ui_TreeView(QtGui.QTreeView):
+    def __init__(self, widget):
+        super(Ui_TreeView, self).__init__(widget)
+        
+    def event(self, event):
+        if (event.type()==QtCore.QEvent.KeyPress) and (event.key()==QtCore.Qt.Key_Tab):
+            self.emit(QtCore.SIGNAL("tabPressed"))
+            return True
+
+        return super(Ui_TreeView, self).event(event)
+############################################################################
 def main():
     app = QtGui.QApplication(sys.argv)
     window = Ui_MainWindow()
     window.show()
     sys.exit(app.exec_())
 
+############################################################################
 if __name__ == '__main__':
     main()
