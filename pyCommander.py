@@ -242,7 +242,10 @@ class Ui_MainPanel(QtGui.QWidget):
         self.set_current_folder(str(self.model.filePath(index)))
         self.model.setRootPath(self.current_folder_path)
         self.path_line_edit.setText(self.current_folder_path)
-        self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
+        if self.current_folder_name != "":
+            self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
+        else:
+            self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_path)
     
     def tree_clicked(self, index):
         pass
@@ -252,8 +255,8 @@ class Ui_MainPanel(QtGui.QWidget):
             self.goto_folder(index)
             
     def go_parent_clicked(self):
-        self.goto_folder(self.model.parent(self.model.index(self.current_folder_path)))
-        print self.current_folder_path
+        if self.current_folder_name != "":
+            self.goto_folder(self.model.parent(self.model.index(self.current_folder_path)))
     
     # print self.model.itemFromIndex(index).text()
     
