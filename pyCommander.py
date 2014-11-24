@@ -60,8 +60,14 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 1)
         self.treeViewLeft = QtGui.QTreeView(self.tabL_1)
         self.treeViewLeft.setObjectName(_fromUtf8("treeViewLeft"))
-        self.modelLeft = QtGui.QDirModel()
-        self.treeViewLeft.setModel(self.modelLeft)        
+
+        #self.modelLeft = QtGui.QDirModel()
+        #Using model QFileSystemModel
+        self.treeViewLeft.model = QtGui.QFileSystemModel()
+        self.treeViewLeft.model.setRootPath( QtCore.QDir.currentPath() )
+        self.treeViewLeft.setModel(self.treeViewLeft.model)
+
+
         self.gridLayout_2.addWidget(self.treeViewLeft, 1, 0, 1, 1)
         self.tabLeft.addTab(self.tabL_1, _fromUtf8(""))
         self.horizontalLayout_2.addWidget(self.tabLeft)
@@ -88,8 +94,15 @@ class Ui_MainWindow(object):
         self.gridLayout_3.addWidget(self.widget_2, 0, 0, 1, 1)
         self.treeViewRight = QtGui.QTreeView(self.tabR_1)
         self.treeViewRight.setObjectName(_fromUtf8("treeViewRight"))
-        self.modelRight = QtGui.QDirModel()
-        self.treeViewRight.setModel(self.modelRight)
+
+#        self.modelRight = QtGui.QDirModel()
+        #self.treeViewRight.setModel(self.modelRight)
+
+        self.treeViewRight.model = QtGui.QFileSystemModel()
+        self.treeViewRight.model.setRootPath( QtCore.QDir.currentPath() )
+        self.treeViewRight.setModel(self.treeViewRight.model)
+
+
         self.gridLayout_3.addWidget(self.treeViewRight, 1, 0, 1, 1)
         self.tabRight.addTab(self.tabR_1, _fromUtf8(""))
         self.horizontalLayout_2.addWidget(self.tabRight)
@@ -182,6 +195,10 @@ class Ui_MainWindow(object):
         self.tabRight.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        #events on first attempt
+        self.treeViewLeft.clicked.connect(self.on_treeview_clicked)
+
+
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "PyCommander", None))
         self.tabLeft.setTabText(self.tabLeft.indexOf(self.tabL_1), _translate("MainWindow", "Tab 1", None))
@@ -198,4 +215,31 @@ class Ui_MainWindow(object):
         self.menuConfiguration.setTitle(_translate("MainWindow", "Configuration", None))
         self.actionAbout_PyComander.setText(_translate("MainWindow", "About PyComander...", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+
+
+    # Obtaining the path of the selected file-row
+
+    @QtCore.pyqtSlot(QtCore.QModelIndex)
+    def on_treeview_clicked(self, index):
+        indexItem = self.treeViewLeft.model.index(index.row(), 0, index.parent())
+
+        # path or filename selected
+        fileName = self.treeViewLeft.model.fileName(indexItem)
+        # full path/filename selected
+        filePath = self.treeViewLeft.model.filePath(indexItem)
+       # filePermissions = self.treeViewLeft.model.file(indexItem)
+
+        fileInfo = QtCore.QFileInfo(fileName)
+        fileDetails = self.treeViewLeft.model.fileInfo(indexItem)
+
+
+
+
+        #print (filePermissions)
+        print (fileDetails, fileInfo)
+        print(fileName)
+        print(filePath)
+
+
+
 

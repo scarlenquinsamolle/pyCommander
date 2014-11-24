@@ -61,7 +61,11 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QTreeView" name="treeViewLeft"/>
+            <widget class="QTreeView" name="treeViewLeft">
+             <property name="selectionMode">
+              <enum>QAbstractItemView::MultiSelection</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
