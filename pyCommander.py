@@ -193,19 +193,25 @@ class Ui_MainPanel(QtGui.QWidget):
         self.tab_layout = QtGui.QVBoxLayout(self.tab_widget)
         
         self.path_widget = QtGui.QWidget(self.tab_widget)
-        self.path_layout = QtGui.QGridLayout(self.path_widget)
+        self.path_layout = QtGui.QHBoxLayout(self.path_widget)
         self.path_layout.setMargin(0)
         self.path_layout.setSpacing(0)
         
         self.path_line_edit = QtGui.QLineEdit(self.path_widget)
-        self.path_line_edit.setText(self.current_folder_path)
         self.path_line_edit.setEnabled(False)
-        self.path_layout.addWidget(self.path_line_edit, 0, 0, 1, 1)
+        self.path_layout.addWidget(self.path_line_edit)
+        
+        self.push_up_dir = QtGui.QPushButton(self.path_widget)
+        self.push_up_dir.setToolTip("Go up folder")
+        self.push_up_dir.setIcon(QtGui.QIcon('resources/icon/cdtoparent.png'))
+        self.push_up_dir.setIconSize(QtCore.QSize(24,24))
+        self.push_up_dir.clicked.connect(self.go_parent_clicked)
+        self.path_layout.addWidget(self.push_up_dir)
+        
         self.tab_layout.addWidget(self.path_widget)
         
         self.tree_view = Ui_TreeView(self.tab_widget)
         self.model = QtGui.QFileSystemModel()
-        self.model.setRootPath(self.current_folder_path)
         #self.model.setFilter(QtCore.QDir.Drives)
         self.tree_view.setModel(self.model)
         self.tree_view.setItemsExpandable(False)    
@@ -227,13 +233,16 @@ class Ui_MainPanel(QtGui.QWidget):
         
         self.tab.addTab(self.tab_widget, _fromUtf8(""))
         self.main_layout.addWidget(self.tab)
-        self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
         
         self.tab.setCurrentIndex(0)
         self.goto_folder(self.model.index(self.current_folder_path))
     
     def goto_folder(self, index):
         self.tree_view.setRootIndex(index)
+        self.set_current_folder(str(self.model.filePath(index)))
+        self.model.setRootPath(self.current_folder_path)
+        self.path_line_edit.setText(self.current_folder_path)
+        self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
     
     def tree_clicked(self, index):
         pass
@@ -241,6 +250,10 @@ class Ui_MainPanel(QtGui.QWidget):
     def tree_double_clicked(self, index):
         if index.model().isDir(index):
             self.goto_folder(index)
+            
+    def go_parent_clicked(self):
+        self.goto_folder(self.model.parent(self.model.index(self.current_folder_path)))
+        print self.current_folder_path
     
     # print self.model.itemFromIndex(index).text()
     
