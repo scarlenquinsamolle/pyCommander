@@ -222,6 +222,8 @@ class Ui_MainWindow(object):
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeview_clicked(self, index):
         indexItem = self.treeViewLeft.model.index(index.row(), 0, index.parent())
+       # indexItem.QFontsetStyleSheet("QTreeView::item:selected { border-color:green; "
+                      # "border-style:outset; border-width:2px; color:black; }");
 
         # path or filename selected
         fileName = self.treeViewLeft.model.fileName(indexItem)
