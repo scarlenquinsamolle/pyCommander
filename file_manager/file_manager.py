@@ -17,11 +17,14 @@ class FileManager(QtGui.QWidget):
 
     def add_new_file(self):
 
-
-
-        fileName = QtGui.QFileDialog.getSaveFileName(self, 'Add New File',self.commander_window.tab_left.current_folder_path, selectedFilter='*.txt')
-        if fileName:
-            print fileName
+        if (self.commander_window.tab_left.active):
+            print self.commander_window.tab_left.current_folder_path + "L"
+            fileName = QtGui.QFileDialog.getSaveFileName(self, 'Add New File',self.commander_window.tab_left.current_folder_path, selectedFilter='*.txt')
+        elif (self.commander_window.tab_right.active):
+            print self.commander_window.tab_right.current_folder_path + "R"
+            fileName = QtGui.QFileDialog.getSaveFileName(self, 'Add New File',self.commander_window.tab_right.current_folder_path, selectedFilter='*.txt')
+        else:
+            print "filename"
 
 
 
