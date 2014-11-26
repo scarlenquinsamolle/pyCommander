@@ -11,7 +11,6 @@ from views.window.window_footer_panel import WindowFooterPanel
 class CommanderWindow(QtGui.QMainWindow):
     '''
     constructor
-    
     initialize all Main Window elements
     '''
     def __init__(self):
@@ -20,28 +19,26 @@ class CommanderWindow(QtGui.QMainWindow):
         self.resize(1024, 800)
         self.setWindowTitle("PyCommander")
         
-        self.setup_ui()
+        self.setup_window_ui()
     
     '''
-    setup_ui
-    
+    setup_window_ui
     This method is part of constructor method and meant to be only called by constructor
     '''    
-    def setup_ui(self):
+    def setup_window_ui(self):
         self.central_widget = QtGui.QWidget(self)
         self.central_widget.setAutoFillBackground(False)
         self.central_layout = QtGui.QVBoxLayout(self.central_widget)
         
         self.setup_body_footer_ui()
-        self.setup_menu_bar()
-        self.setup_status_bar()
+        self.setup_menu_bar_ui()
+        self.setup_status_bar_ui()
         self.setup_connections()
         
         QtCore.QMetaObject.connectSlotsByName(self)
     
     '''
     setup_body_footer_ui
-    
     This method is part of constructor meant to be only called by constructor
     '''
     def setup_body_footer_ui(self):
@@ -58,7 +55,7 @@ class CommanderWindow(QtGui.QMainWindow):
         self.footer_layout = QtGui.QHBoxLayout(self.footer_container)
         self.footer_layout.setMargin(0)
         # Setting up footer components
-        self.setup_footer()
+        self.setup_footer_ui()
         self.central_layout.addWidget(self.footer_container)
         # adding the main central widget for the main window
         self.setCentralWidget(self.central_widget)
@@ -66,36 +63,38 @@ class CommanderWindow(QtGui.QMainWindow):
     '''
     This method is meant to create the menu bar of this window
     '''
-    def setup_menu_bar(self):
+    def setup_menu_bar_ui(self):
         self.menubar = WindowMenuBar(self)        
         self.setMenuBar(self.menubar)
     
     '''
     This method is meant to create the status bar of this window
     '''
-    def setup_status_bar(self):
+    def setup_status_bar_ui(self):
         self.statusbar = QtGui.QStatusBar(self)        
         self.setStatusBar(self.statusbar)
-                
-    def setup_footer(self):
+    '''
+    This method is meant to create the footer push button elemensts
+    '''            
+    def setup_footer_ui(self):
         self.footer = WindowFooterPanel(self);
         
     '''
     this method is meant to initiate any connection with window commander
     '''
     def setup_connections(self):
-        self.connect(self.tab_left.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_right_panel)
-        self.connect(self.tab_right.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_left_panel)
+        self.connect(self.tab_left.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_right_panel_connection)
+        self.connect(self.tab_right.tree_view, QtCore.SIGNAL("tabPressed"), self.switch_to_left_panel_connection)
     
     '''
     action to switch from panel right to left panel
     '''
-    def switch_to_left_panel(self):
+    def switch_to_left_panel_connection(self):
         self.tab_left.tree_view.setFocus()
     
     '''
     action to switch from panel left to right panel
     '''
-    def switch_to_right_panel(self):
+    def switch_to_right_panel_connection(self):
         self.tab_right.tree_view.setFocus()
     

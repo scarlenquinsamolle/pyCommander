@@ -11,12 +11,12 @@ class WindowMenuBar(QtGui.QMenuBar):
     '''
     def __init__(self, commander_window):
         super(WindowMenuBar, self).__init__(commander_window)
-        self.setup_menu_bar()
+        self.setup_menu_bar_ui()
         self.commander_window = commander_window
     '''
     This method is meant to create all the menu elements on this class
     '''
-    def setup_menu_bar(self):
+    def setup_menu_bar_ui(self):
         self.setup_menu_bar_file()
         self.setup_menu_bar_configuration()
         self.setup_menu_bar_help()

@@ -7,17 +7,27 @@ import os
 
 from PyQt4 import QtCore, QtGui
 from views.window.filepanel.panel_tree_view import PanelTreeView
+from views.window.filepanel.panel_file_path import PanelFilePath
+from views.window.filepanel.panel_status_label import PanelStatusLabel
 
 class WindowFilePanel(QtGui.QWidget):
     '''
     classdocs
     '''
-    def __init__(self, main_window):
-        super(WindowFilePanel, self).__init__(main_window.body_container)
+    def __init__(self, commander_window):
+        super(WindowFilePanel, self).__init__(commander_window.body_container)
+        self.commander_window = commander_window
+        
         self.set_current_folder()
-        self.setup_widget()
-        main_window.body_layout.addWidget(self)
-            
+        self.setup_file_panel_ui()
+        
+        self.goto_folder(self.tree_view.model.index(self.current_folder_path))
+        commander_window.body_layout.addWidget(self)
+        
+        self.setup_connections()
+    '''
+    Initialize current folder path and name to be used as reference
+    '''        
     def set_current_folder(self, current_folder_path = ""):
         if (current_folder_path == ""):
             current_folder_path = os.getcwd()
@@ -27,79 +37,53 @@ class WindowFilePanel(QtGui.QWidget):
             
         self.current_folder_path = current_folder_path
         self.current_folder_name = current_folder_name
-        
-    def setup_widget(self):        
+    '''
+    setup window panel elements for ui
+    '''
+    def setup_file_panel_ui(self): 
+        # setting up main layout       
         self.main_layout = QtGui.QVBoxLayout(self)
         self.main_layout.setSpacing(0)
         self.main_layout.setMargin(0)
-        
+        # setting up tab
         self.tab = QtGui.QTabWidget(self)
-        
         self.tab_widget = QtGui.QWidget()
         self.tab_layout = QtGui.QVBoxLayout(self.tab_widget)
         
-        self.path_widget = QtGui.QWidget(self.tab_widget)
-        self.path_layout = QtGui.QHBoxLayout(self.path_widget)
-        self.path_layout.setMargin(0)
-        self.path_layout.setSpacing(0)
-        
-        self.path_line_edit = QtGui.QLineEdit(self.path_widget)
-        self.path_line_edit.setEnabled(False)
-        self.path_layout.addWidget(self.path_line_edit)
-        
-        self.push_up_dir = QtGui.QPushButton(self.path_widget)
-        self.push_up_dir.setToolTip("Go up folder")
-        self.push_up_dir.setIcon(QtGui.QIcon('resources/icon/cdtoparent.png'))
-        self.push_up_dir.setIconSize(QtCore.QSize(24,24))
-        self.push_up_dir.clicked.connect(self.go_parent_clicked)
-        self.path_layout.addWidget(self.push_up_dir)
-        
+        self.path_widget = PanelFilePath(self)
         self.tab_layout.addWidget(self.path_widget)
-        
-        self.tree_view = PanelTreeView(self.tab_widget)
-        self.model = QtGui.QFileSystemModel()
-        #self.model.setFilter(QtCore.QDir.Drives)
-        self.tree_view.setModel(self.model)
-        self.tree_view.setItemsExpandable(False)    
-        self.tree_view.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-        
-        self.tree_view.clicked.connect(self.tree_clicked)
-        self.tree_view.doubleClicked.connect(self.tree_double_clicked)
+        # Setting up tree view widget it contains the file system model as attribute
+        self.tree_view = PanelTreeView(self)
         self.tab_layout.addWidget(self.tree_view)
         
-        self.status_widget = QtGui.QWidget(self.tab_widget)
-        self.status_layout = QtGui.QHBoxLayout(self.status_widget)
-        self.status_layout.setMargin(0)
-        self.status_layout.setSpacing(0)
-        
-        self.status_line_edit = QtGui.QLabel(self.status_widget)
-        self.status_line_edit.setText(str(self.model.rowCount(self.model.index(self.current_folder_path))) + " / global folder data here")
-        self.status_layout.addWidget(self.status_line_edit)
+        self.status_widget = PanelStatusLabel(self)
         self.tab_layout.addWidget(self.status_widget)
         
         self.tab.addTab(self.tab_widget, "")
         self.main_layout.addWidget(self.tab)
-        
-        self.tab.setCurrentIndex(0)
-        self.goto_folder(self.model.index(self.current_folder_path))
     
+    '''
+    takes the file system model to an specific folder based on the index provided
+    it will also visually update the tree view 
+    '''
     def goto_folder(self, index):
         self.tree_view.setRootIndex(index)
-        self.set_current_folder(str(self.model.filePath(index)))
-        self.model.setRootPath(self.current_folder_path)
-        self.path_line_edit.setText(self.current_folder_path)
+        self.set_current_folder(str(self.tree_view.model.filePath(index)))
+        self.tree_view.model.setRootPath(self.current_folder_path)
+        self.path_widget.path_line_edit.setText(self.current_folder_path)
         if self.current_folder_name != "":
             self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_name)
         else:
             self.tab.setTabText(self.tab.indexOf(self.tab_widget), self.current_folder_path)
+    '''
+    setup the connections that will be handled by signals for this tree view
+    '''
+    def setup_connections(self):
+        self.connect(self.tree_view, QtCore.SIGNAL("altEnterPressed"), self.open_properties_connection)
     
-    def tree_clicked(self, index):
-        pass
-    
-    def tree_double_clicked(self, index):
-        if index.model().isDir(index):
-            self.goto_folder(index)
-            
-    def go_parent_clicked(self):
-        if self.current_folder_name != "":
-            self.goto_folder(self.model.parent(self.model.index(self.current_folder_path)))
+    '''
+    should open the dialog with selected item(s) in the tree to show their properties
+    '''    
+    def open_properties_connection(self):
+        print "enter pressed"
+        
